@@ -5,7 +5,8 @@
 
 [![Paper](https://img.shields.io/badge/arXiv-Paper-red)](https://arxiv.org/abs/2604.02281)
 
-Ningyu Yan¹, Zhuocheng Xie², Kai Guo³, Yejun Gu³,⁴,*, Huajian Gao⁵,* Yang Xiang**¹,⁶,*
+Ningyu Yan¹, Zhuocheng Xie², Kai Guo³, Yejun Gu³,⁴,* Huajian Gao⁵,* Yang Xiang**¹,⁶,*
+
 
 1. Department of Mathematics, The Hong Kong University of Science and Technology, Clear Water Bay, Kowloon, Hong Kong, China
 2. Department of Materials Science & Engineering, University of Toronto, Ontario, Canada M5S 3E4
