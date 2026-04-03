@@ -31,7 +31,7 @@ The inherent compositional heterogeneity of multi-principal element alloys (MPEA
 
 </div>
 
-![Pipeline](assets/general_framework.eps) <!-- 你可以把图片放在 assets 文件夹下 -->
+![Pipeline](assets/general_framework.jpg) <!-- 你可以把图片放在 assets 文件夹下 -->
 
 
 
