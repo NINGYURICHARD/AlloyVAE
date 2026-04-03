@@ -35,11 +35,11 @@ The inherent compositional heterogeneity of multi-principal element alloys (MPEA
 
 # Overview
 
-This repository contains a three-stage workflow for tungsten-carbide microstructure learning and design:
+This repository contains a three-stage workflow for the core implementation of AlloyVAE in the composition field & residual stress example:
 
-1. `dataset/`: convert raw MD simulation outputs into block-averaged tensors and normalized training arrays.
-2. `model_training/`: define and train a conditional variational autoencoder (CVAE) that maps microstructure descriptors to stress fields.
-3. `material_design/`: optimize concentration fields with a trained CVAE checkpoint for inverse material design.
+1. `dataset/`: convert raw MD simulation outputs into block-averaged tensors and normalization for training.
+2. `model_training/`: training of the AlloyVAE.
+3. `material_design/`: optimize concentration fields with the trained AlloyVAE checkpoint for inverse material design.
 
 ## Recommended Conda Environment
 
@@ -65,18 +65,15 @@ If you want notebook-based inspection and visualization, also install:
 pip install matplotlib seaborn umap-learn jupyter ipykernel
 ```
 
-### GPU note
-
-Training and optimization are much faster on GPU. Install a CUDA-enabled PyTorch build that matches your machine if GPU acceleration is needed. If not, the CPU build of PyTorch also works for basic testing.
-
 ## Folder Overview
 
 ### `dataset/`
 
 This folder prepares the learning dataset from MD simulations.
 
-- [dataprocess.py](/d:/plot/code_release/dataset/dataprocess.py) reads raw atomistic dump files in `MD_sim_examples/`, bins atoms into 3D blocks, and computes block-wise concentration, Warren-Cowley descriptors, and stress averages.
-- [normalization.py](/d:/plot/code_release/dataset/normalization.py) merges block-averaged `.npy` files, downsamples from the original resolution to `4 x 4 x 4`, applies `MinMaxScaler`, shuffles samples, and produces the final training arrays:
+- Putting MD simulation results files in `MD_sim_examples/`. Here we give several dump files in this folder.
+- [dataprocess.py](/dataset/dataprocess.py) reads raw atomistic dump files in `MD_sim_examples/`, bins atoms into 3D blocks, and computes block-averaged concentration, Warren-Cowley parameters, and residual stress.
+- [normalization.py](/dataset/normalization.py) merges block-averaged `.npy` files, downsamples from the original resolution to `4 x 4 x 4`, applies `MinMaxScaler`, shuffles samples, and produces the final normalized training arrays:
   - `X_WC_3500.npy`
   - `Y_WC_3500.npy`
 
@@ -86,37 +83,37 @@ In short, `dataset/` converts raw simulation outputs into normalized tensors rea
 
 This folder contains the CVAE model and training scripts.
 
-- [CVAEWC.py](/d:/plot/code_release/model_training/CVAEWC.py) defines the main CVAE architecture:
+- [CVAEWC.py](/model_training/CVAEWC.py) defines the main AlloyVAE architecture:
   - 3D convolutional encoder for stress fields
   - smoothing/projection modules for concentration and SRO/WC conditions
   - latent reparameterization
   - decoder that reconstructs the stress field from latent variables and learned condition embeddings
-- [dataset.py](/d:/plot/code_release/model_training/dataset.py) provides a lightweight PyTorch `Dataset` wrapper.
-- [trainAlloyVAE.py](/d:/plot/code_release/model_training/trainAlloyVAE.py) loads `X_WC_3500.npy` and `Y_WC_3500.npy`, splits training data, trains the CVAE, stores loss curves, and saves checkpoints.
-- [checkAlloyVAE.ipynb](/d:/plot/code_release/model_training/checkAlloyVAE.ipynb) is an analysis notebook for model evaluation, latent-space inspection, and prediction visualization.
-
-In short, `model_training/` turns normalized dataset tensors into a trained generative surrogate model.
+- [dataset.py](/model_training/dataset.py) provides a lightweight PyTorch `Dataset` wrapper.
+- [trainAlloyVAE.py](/model_training/trainAlloyVAE.py) loads `X_WC_3500.npy` and `Y_WC_3500.npy`, splits training data, trains the AlloyVAE, stores loss curves, and saves checkpoints.
+  
+In short, `model_training/` gives the training implementation of AlloyVAE.
 
 ### `material_design/`
 
 This folder performs inverse design using a trained checkpoint.
 
-- [optimize.py](/d:/plot/code_release/material_design/optimize.py) loads a trained CVAE model, initializes candidate concentration fields and latent noise, then iteratively optimizes them to improve a target stress-related objective while keeping the generated structure self-consistent.
+- [optimize.py](/material_design/optimize.py) loads a trained AlloyVAE model, initializes candidate concentration fields and latent noise, then iteratively optimizes them to improve a target stress-related objective while keeping the generated concentration self-consistent.
 
-In short, `material_design/` uses the trained CVAE as a design engine rather than only a predictor.
+In short, `material_design/` uses the trained AlloyVAE as a design engine rather than only a predictor.
 
 ## Suggested Workflow
 
 1. Prepare or verify the raw block-averaged data in `dataset/block_averaged_data/`.
-2. Run [normalization.py](/d:/plot/code_release/dataset/normalization.py) to generate `dataset/X_WC_3500.npy` and `dataset/Y_WC_3500.npy`.
-3. Run [trainAlloyVAE.py](/d:/plot/code_release/model_training/trainAlloyVAE.py) to train the CVAE and save checkpoints.
-4. Use [checkAlloyVAE.ipynb](/d:/plot/code_release/model_training/checkAlloyVAE.ipynb) for evaluation and visualization.
-5. Run [optimize.py](/d:/plot/code_release/material_design/optimize.py) for inverse material design with a trained checkpoint.
+2. Run [dataprocess.py](/dataset/dataprocess.py) to generate the original block-averaged dataset.
+3. Run [normalization.py](/dataset/normalization.py) to generate normalized `dataset/X_WC_3500.npy` and `dataset/Y_WC_3500.npy`.
+4. Run [trainAlloyVAE.py](/model_training/trainAlloyVAE.py) to train the AlloyVAE and save checkpoints.
+6. Run [optimize.py](/material_design/optimize.py) for inverse material design with a trained checkpoint.
+7. Use [checkAlloyVAE.ipynb](/model_training/checkAlloyVAE.ipynb) is an analysis notebook for evaluation of AlloyVAE and Optimization.
 
 ## Important Notes
 
+- Suggest running code in GPU environment.
 - Several non-GitHub scripts still contain machine-specific absolute paths such as `/home/...`. Update them before running on a new machine.
-- The main public entry points are now `normalization.py`, `trainAlloyVAE.py`, and `optimize.py`.
 - The notebook and optimization scripts assume that training checkpoints already exist.
 
 
