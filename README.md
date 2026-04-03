@@ -5,15 +5,35 @@
 
 [![Paper](https://img.shields.io/badge/arXiv-Paper-red)](https://arxiv.org/abs/2604.02281)
 
-Ningyu Yan¹, Zhuocheng Xie², Kai Guo³, Yejun Gu³,⁴,* Huajian Gao⁵,* Yang Xiang**¹,⁶,*
+Ningyu Yan¹, Zhuocheng Xie², Kai Guo³, Yejun Gu³,⁴,\*, Huajian Gao⁵,\*, Yang Xiang¹,⁶,\*
 
-
-1. Department of Mathematics, The Hong Kong University of Science and Technology, Clear Water Bay, Kowloon, Hong Kong, China
-2. Department of Materials Science & Engineering, University of Toronto, Ontario, Canada M5S 3E4
-3. Institute of High Performance Computing, Agency for Science, Technology and Research, Singapore 138632
-4. Department of Mechanical Engineering, Whiting School of Engineering, Johns Hopkins University, Baltimore, MD, USA 21218
-5. Mechano-X Institute, Applied Mechanics Laboratory, Department of Engineering Mechanics, Tsinghua University, Beijing, China 100084
-6. HKUST Shenzhen–Hong Kong Collaborative Innovation Research Institute, Shenzhen, China
+<!-- 替换原有的 1. 2. 3. 列表 -->
+<table>
+  <tr>
+    <td align="center">1</td>
+    <td align="center">Department of Mathematics, The Hong Kong University of Science and Technology, Clear Water Bay, Kowloon, Hong Kong, China</td>
+  </tr>
+  <tr>
+    <td align="center">2</td>
+    <td align="center">Department of Materials Science & Engineering, University of Toronto, Ontario, Canada M5S 3E4</td>
+  </tr>
+  <tr>
+    <td align="center">3</td>
+    <td align="center">Institute of High Performance Computing, Agency for Science, Technology and Research, Singapore 138632</td>
+  </tr>
+  <tr>
+    <td align="center">4</td>
+    <td align="center">Department of Mechanical Engineering, Whiting School of Engineering, Johns Hopkins University, Baltimore, MD, USA 21218</td>
+  </tr>
+  <tr>
+    <td align="center">5</td>
+    <td align="center">Mechano-X Institute, Applied Mechanics Laboratory, Department of Engineering Mechanics, Tsinghua University, Beijing, China 100084</td>
+  </tr>
+  <tr>
+    <td align="center">6</td>
+    <td align="center">HKUST Shenzhen–Hong Kong Collaborative Innovation Research Institute, Shenzhen, China</td>
+  </tr>
+</table>
 
 
 \* *Corresponding authors*
