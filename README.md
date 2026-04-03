@@ -3,7 +3,7 @@
 # AlloyVAE: A generative model for complex probabilistic field-to-field relationships in alloys
 
 
-[![Paper](https://img.shields.io/badge/arXiv-Paper-red)([https://arxiv.org/abs/2604.02281](https://arxiv.org/abs/2604.02281))
+[![Paper](https://img.shields.io/badge/arXiv-Paper-red)](https://arxiv.org/abs/2604.02281)
 
 Ningyu Yan¹, Zhuocheng Xie², Kai Guo³, Yejun Gu³,⁴,*, Huajian Gao⁵,* Yang Xiang**¹,⁶,*
 
