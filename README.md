@@ -3,18 +3,9 @@
 # AlloyVAE: A generative model for complex probabilistic field-to-field relationships in alloys
 
 
-[![Paper](https://img.shields.io/badge/arXiv-Paper-red)(https://arxiv.org/abs/2604.02281)
+[![Paper](https://img.shields.io/badge/arXiv-Paper-red)([https://arxiv.org/abs/2604.02281](https://arxiv.org/abs/2604.02281))
 
-- **Ningyu Yan**¹
-- **Zhuocheng Xie**²
-- **Kai Guo**³
-- **Yejun Gu**³,⁴,*
-- **Huajian Gao**⁵,*
-- **Yang Xiang**¹,⁶,*
-
----
-
-#### 🏫 Affiliations
+Ningyu Yan¹, Zhuocheng Xie², Kai Guo³, Yejun Gu³,⁴,*, Huajian Gao⁵,* Yang Xiang**¹,⁶,*
 
 1. Department of Mathematics, The Hong Kong University of Science and Technology, Clear Water Bay, Kowloon, Hong Kong, China
 2. Department of Materials Science & Engineering, University of Toronto, Ontario, Canada M5S 3E4
@@ -23,7 +14,6 @@
 5. Mechano-X Institute, Applied Mechanics Laboratory, Department of Engineering Mechanics, Tsinghua University, Beijing, China 100084
 6. HKUST Shenzhen–Hong Kong Collaborative Innovation Research Institute, Shenzhen, China
 
----
 
 \* *Corresponding authors*
 
