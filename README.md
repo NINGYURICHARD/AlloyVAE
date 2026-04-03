@@ -33,7 +33,7 @@ The inherent compositional heterogeneity of multi-principal element alloys (MPEA
 
 ![Pipeline](assets/general_framework.jpg) <!-- 你可以把图片放在 assets 文件夹下 -->
 
-# CVAE-Based Microstructure-to-Stress Modeling
+# Overview
 
 This repository contains a three-stage workflow for tungsten-carbide microstructure learning and design:
 
@@ -65,19 +65,6 @@ If you want notebook-based inspection and visualization, also install:
 pip install matplotlib seaborn umap-learn jupyter ipykernel
 ```
 
-### Optional packages for legacy scripts
-
-Some older scripts in `model_training/` import utilities from `dataset.py`, which adds extra dependencies:
-
-```bash
-pip install pillow torchvision albumentations
-```
-
-If you only use the cleaned GitHub versions, these are not strictly necessary. However, the current `model_training/trainCVAEWC2_github.py` still imports `MapDataset` from `dataset.py`, so either:
-
-- install the optional packages above, or
-- change the import to `from dataset_github import MapDataset`
-
 ### GPU note
 
 Training and optimization are much faster on GPU. Install a CUDA-enabled PyTorch build that matches your machine if GPU acceleration is needed. If not, the CPU build of PyTorch also works for basic testing.
@@ -89,10 +76,9 @@ Training and optimization are much faster on GPU. Install a CUDA-enabled PyTorch
 This folder prepares the learning dataset from MD simulations.
 
 - [dataprocess.py](/d:/plot/code_release/dataset/dataprocess.py) reads raw atomistic dump files in `MD_sim_examples/`, bins atoms into 3D blocks, and computes block-wise concentration, Warren-Cowley descriptors, and stress averages.
-- [normalization_github.py](/d:/plot/code_release/dataset/normalization_github.py) merges block-averaged `.npy` files, downsamples from the original resolution to `4 x 4 x 4`, applies `MinMaxScaler`, shuffles samples, and produces the final training arrays:
+- [normalization.py](/d:/plot/code_release/dataset/normalization.py) merges block-averaged `.npy` files, downsamples from the original resolution to `4 x 4 x 4`, applies `MinMaxScaler`, shuffles samples, and produces the final training arrays:
   - `X_WC_3500.npy`
   - `Y_WC_3500.npy`
-- [normalization.py](/d:/plot/code_release/dataset/normalization.py) is the older path-specific version of the same preprocessing logic.
 
 In short, `dataset/` converts raw simulation outputs into normalized tensors ready for model training.
 
@@ -100,14 +86,14 @@ In short, `dataset/` converts raw simulation outputs into normalized tensors rea
 
 This folder contains the CVAE model and training scripts.
 
-- [CVAEWC_github.py](/d:/plot/code_release/model_training/CVAEWC_github.py) defines the main CVAE architecture:
+- [CVAEWC.py](/d:/plot/code_release/model_training/CVAEWC.py) defines the main CVAE architecture:
   - 3D convolutional encoder for stress fields
   - smoothing/projection modules for concentration and SRO/WC conditions
   - latent reparameterization
   - decoder that reconstructs the stress field from latent variables and learned condition embeddings
-- [dataset_github.py](/d:/plot/code_release/model_training/dataset_github.py) provides a lightweight PyTorch `Dataset` wrapper.
-- [trainCVAEWC2_github.py](/d:/plot/code_release/model_training/trainCVAEWC2_github.py) loads `X_WC_3500.npy` and `Y_WC_3500.npy`, splits training data, trains the CVAE, stores loss curves, and saves checkpoints.
-- [checkCVAEWC0215.ipynb](/d:/plot/code_release/model_training/checkCVAEWC0215.ipynb) is an analysis notebook for model evaluation, latent-space inspection, and prediction visualization.
+- [dataset.py](/d:/plot/code_release/model_training/dataset.py) provides a lightweight PyTorch `Dataset` wrapper.
+- [trainAlloyVAE.py](/d:/plot/code_release/model_training/trainAlloyVAE.py) loads `X_WC_3500.npy` and `Y_WC_3500.npy`, splits training data, trains the CVAE, stores loss curves, and saves checkpoints.
+- [checkAlloyVAE.ipynb](/d:/plot/code_release/model_training/checkAlloyVAE.ipynb) is an analysis notebook for model evaluation, latent-space inspection, and prediction visualization.
 
 In short, `model_training/` turns normalized dataset tensors into a trained generative surrogate model.
 
@@ -115,37 +101,24 @@ In short, `model_training/` turns normalized dataset tensors into a trained gene
 
 This folder performs inverse design using a trained checkpoint.
 
-- [optimize1000_c_0211.py](/d:/plot/code_release/material_design/optimize1000_c_0211.py) loads a trained CVAE model, initializes candidate concentration fields and latent noise, then iteratively optimizes them to improve a target stress-related objective while keeping the generated structure self-consistent.
+- [optimize.py](/d:/plot/code_release/material_design/optimize.py) loads a trained CVAE model, initializes candidate concentration fields and latent noise, then iteratively optimizes them to improve a target stress-related objective while keeping the generated structure self-consistent.
 
 In short, `material_design/` uses the trained CVAE as a design engine rather than only a predictor.
 
 ## Suggested Workflow
 
 1. Prepare or verify the raw block-averaged data in `dataset/block_averaged_data/`.
-2. Run [normalization_github.py](/d:/plot/code_release/dataset/normalization_github.py) to generate `dataset/X_WC_3500.npy` and `dataset/Y_WC_3500.npy`.
-3. Run [trainCVAEWC2_github.py](/d:/plot/code_release/model_training/trainCVAEWC2_github.py) to train the CVAE and save checkpoints.
-4. Use [checkCVAEWC0215.ipynb](/d:/plot/code_release/model_training/checkCVAEWC0215.ipynb) for evaluation and visualization.
-5. Run [optimize1000_c_0211.py](/d:/plot/code_release/material_design/optimize1000_c_0211.py) for inverse material design with a trained checkpoint.
+2. Run [normalization.py](/d:/plot/code_release/dataset/normalization.py) to generate `dataset/X_WC_3500.npy` and `dataset/Y_WC_3500.npy`.
+3. Run [trainAlloyVAE.py](/d:/plot/code_release/model_training/trainAlloyVAE.py) to train the CVAE and save checkpoints.
+4. Use [checkAlloyVAE.ipynb](/d:/plot/code_release/model_training/checkAlloyVAE.ipynb) for evaluation and visualization.
+5. Run [optimize.py](/d:/plot/code_release/material_design/optimize.py) for inverse material design with a trained checkpoint.
 
 ## Important Notes
 
 - Several non-GitHub scripts still contain machine-specific absolute paths such as `/home/...`. Update them before running on a new machine.
-- The cleaned `*_github.py` scripts are the best starting point for public use.
+- The main public entry points are now `normalization.py`, `trainAlloyVAE.py`, and `optimize.py`.
 - The notebook and optimization scripts assume that training checkpoints already exist.
 
 
-<!-- ## Features
 
-- ✅ **Dense Matching**: Robust feature matching across frames.
-- ✅ **Multi-View Foundation Models**: Leverage pre-trained models for better generalization.
-- ✅ **Gaussian Splatting**: High-quality static scene reconstruction.
-- ✅ **Real-Time Tracking**: Efficient pose estimation via bundle adjustment.
 
----
-
-## Installation
-
-```bash
-git clone https://github.com/yourusername/M3.git
-cd M3
-pip install -r requirements.txt -->
